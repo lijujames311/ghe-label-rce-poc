@@ -37,13 +37,14 @@ jobs:
 
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
-      - name: Confirm payload execution (marker written by injected command)
+      - name: Confirm payload execution
         if: always()
         run: |
-          if [ -f /tmp/PWNED_BY_LABEL ]; then
-            echo "RCE-CONFIRMED: /tmp/PWNED_BY_LABEL exists on the runner"
-            ls -la /tmp/PWNED_BY_LABEL
-          else
-            echo "no marker"
-          fi
-
+          for f in /tmp/PWNED_BY_LABEL /tmp/P2 /tmp/P3; do
+            if [ -f "$f" ]; then
+              echo "MARKER FOUND: $f"
+              ls -la "$f"
+              echo "--- contents ---"
+              cat "$f"
+            fi
+          done
